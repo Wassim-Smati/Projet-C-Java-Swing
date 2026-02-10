@@ -1,0 +1,13 @@
+film.cpp
+film.h
+groupe.cpp
+groupe.h
+main.cpp
+multimediamanager.cpp
+multimediamanager.h
+multimediaobject.cpp
+multimediaobject.h
+photo.cpp
+photo.h
+video.cpp
+video.h

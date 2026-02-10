@@ -1,0 +1,10 @@
+1-Facebook (ML/AI - DevOps - Distributed Systems)
+2-Nvidia (Distributed Systems)
+3-Apple (ML/AI)
+4-Google (ML/AI)
+5-Datadog Soft Eng (Data - ML/AI - Distributed Systems)
+6-Hugging Face 
+7-Amazon Soft Eng (ML/AI)
+8-Helsing (ML/AI)
+9-Gorgias (ML/AI)
+10-Criteo (ML/AI)
