@@ -18,8 +18,8 @@ int main(int argc, char* argv[])
 {
     std::cout << "Serveur lancé ! ";
     MultimediaManager manager;
-    PhotoPtr photo = manager.createPhoto("potiron", "C:\\Users\\Wess9\\Pictures\\potiron.jpg", 4, 23);
-    VideoPtr video = manager.createVideo("video1", "C:\\Users\\Wess9\\Videos\\Captures\\vinted.mp4", 23);
+    PhotoPtr photo = manager.createPhoto("franck", "franck.jpeg", 4, 23);
+    VideoPtr video = manager.createVideo("video1", "video.mp4", 23);
 
     GroupePtr g = manager.createGroupe("Contenu");
     g->push_back(photo);

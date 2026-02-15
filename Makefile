@@ -28,6 +28,18 @@ run: ${PROG}
 ${PROG}: depend-${PROG} ${OBJETS}
 	${CXX} -o $@ ${CXXFLAGS} ${LDFLAGS} ${OBJETS} ${LDLIBS}
 
+server:
+	$(MAKE) -f Makefile-cliserv server
+
+client:
+	$(MAKE) -f Makefile-cliserv client
+
+run-server:
+	$(MAKE) -f Makefile-cliserv run-server
+
+run-client:
+	$(MAKE) -f Makefile-cliserv run-client
+
 clean:
 	-@$(RM) *.o depend-${PROG} core media_table.txt group_table.txt 1>/dev/null 2>&1
 
