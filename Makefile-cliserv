@@ -17,8 +17,8 @@ CLISERV=cliserv
 # Fichiers sources (NE PAS METTRE les .h ni les .o mais seulement les .cpp)
 #
 CLIENT_SOURCES=client.cpp ccsocket.cpp 
-SERVER_SOURCES=server.cpp tcpserver.cpp ccsocket.cpp 
-CLISERV_SOURCES=client.cpp server.cpp tcpserver.cpp ccsocket.cpp Makefile-cliserv
+SERVER_SOURCES=server.cpp tcpserver.cpp ccsocket.cpp multimediaobject.cpp photo.cpp video.cpp film.cpp groupe.cpp multimediamanager.cpp 
+CLISERV_SOURCES=client.cpp server.cpp tcpserver.cpp ccsocket.cpp multimediaobject.cpp photo.cpp video.cpp film.cpp groupe.cpp multimediamanager.cpp Makefile-cliserv
 #
 # Fichiers objets (ne pas modifier, sauf si l'extension n'est pas .cpp)
 #
