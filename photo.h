@@ -3,31 +3,35 @@
 #include "multimediaobject.h"
 #include <iostream>
 
-class Photo : public MultimediaObject
-{
+class Photo : public MultimediaObject {
 protected:
-    Photo(){};
-    Photo(const std::string& name,const std::string& pathfile, double latitude, double longitude)
-        :MultimediaObject(name, pathfile), latitude(latitude), longitude(longitude){}
+    Photo() = default;
+    Photo(const std::string& name, const std::string& pathfile, double latitude, double longitude)
+        : MultimediaObject(name, pathfile), latitude(latitude), longitude(longitude) {}
     friend class MultimediaManager;
+
+    void writeData(std::ostream& out) const override;
+    void readData(std::istream& in) override;
 
 private:
     double latitude{};
     double longitude{};
+
 public:
-
     virtual ~Photo();
-    double getLatitude() const {return latitude;}
-    double getLongitude() const {return longitude;}
+    double getLatitude() const { return latitude; }
+    double getLongitude() const { return longitude; }
 
-    void setLatitude(double latitude) {this->latitude=latitude;}
-    void setLongitude(double longitude) {this->longitude=longitude;}
+    void setLatitude(double newLatitude) { latitude = newLatitude; }
+    void setLongitude(double newLongitude) { longitude = newLongitude; }
 
-    void afficher(std::ostream& flux) const override{
+    void afficher(std::ostream& flux) const override {
         MultimediaObject::afficher(flux);
-        flux << "latitude : " << latitude;
-        flux << "longitude : " << longitude;
+        flux << "Latitude : " << latitude << "\n";
+        flux << "Longitude : " << longitude << "\n";
     }
+
+    std::string className() const override { return "Photo"; }
 
     void play() const override;
 };
