@@ -7,8 +7,6 @@
 #include <sstream>
 #include <vector>
 
-#define VERSION_TP12_13 1
-
 int main(int argc, const char* argv[]) {
     (void)argc;
     (void)argv;
@@ -19,7 +17,6 @@ int main(int argc, const char* argv[]) {
         const std::string potironPath = "C:\\Users\\Wess9\\Pictures\\potiron.jpg";
         const std::string videoPath = "C:\\Users\\Wess9\\Videos\\Captures\\vinted.mp4";
 
-#if VERSION_TP12_13
         PhotoPtr media1 = manager.createPhoto("photo_test", potironPath, 4.0, 23.0);
         VideoPtr media2 = manager.createVideo("video_test", videoPath, 23);
         FilmPtr media3 = manager.createFilm("film_test", videoPath, 120, std::vector<int>{20, 30, 70});
@@ -55,19 +52,6 @@ int main(int argc, const char* argv[]) {
         } catch (const std::exception& e) {
             std::cout << "Erreur doublon de nom : " << e.what() << std::endl;
         }
-#else
-        PhotoPtr media1 = manager.createPhoto("tompere", potironPath, 4, 23);
-        VideoPtr media2 = manager.createVideo("tompere2", videoPath, 23);
-        FilmPtr media3 = manager.createFilm("tompere3", videoPath, 12, std::vector<int>{2, 3, 124, 45});
-
-        GroupePtr content = manager.createGroupe("Contenu");
-        content->push_back(media1);
-        content->push_back(media2);
-        content->push_back(media3);
-
-        content->afficher(std::cout);
-        content->play();
-#endif
 
     } catch (const std::exception& e) {
         std::cerr << "Erreur fatale : " << e.what() << std::endl;

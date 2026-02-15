@@ -44,11 +44,9 @@ run-client:
 
 clean:
 	-@$(RM) *.o depend-${PROG} core media_table.txt group_table.txt 1>/dev/null 2>&1
-	-@$(MAKE) -f Makefile-cliserv clean 1>/dev/null 2>&1 || true
 
 clean-all: clean
 	-@$(RM) ${PROG} 1>/dev/null 2>&1
-	-@$(MAKE) -f Makefile-cliserv clean-all 1>/dev/null 2>&1 || true
 
 depend-${PROG}: ${SOURCES}
 	${CXX} ${CXXFLAGS} -MM ${SOURCES} > depend-${PROG}

@@ -35,8 +35,3 @@ Ce projet implémente :
 
 ## Note sur `main.cpp`
 Comme recommandé dans le TP, `main.cpp` conserve deux versions de scénario via compilation conditionnelle (`#if VERSION_TP12_13` / `#else`).
-
-## Exécution recommandée
-- `make run` lance directement le serveur (`server`) pour la partie client/serveur.
-- `make run-client` lance le client.
-- `make run-main` lance l'ancien scénario local de `main.cpp`.
