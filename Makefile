@@ -22,7 +22,9 @@ endif
 
 all: ${PROG}
 
-run: ${PROG}
+run: run-server
+
+run-main: ${PROG}
 	./${PROG}
 
 ${PROG}: depend-${PROG} ${OBJETS}
