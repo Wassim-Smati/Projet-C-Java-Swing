@@ -1,69 +1,69 @@
 # Distributed Multimedia Center
 
-> Serveur multimédia C++ et interface télécommande Java Swing communicant par Sockets TCP.
+> C++ multimedia server and Java Swing remote control interface communicating via TCP Sockets.
 
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-00599C?logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![Java](https://img.shields.io/badge/Java-Swing-ED8B00?logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-Projet développé dans le cadre du cours **INF224 (Paradigmes de Programmation)** à **Télécom Paris**.
+Project developed as part of the **INF224 (Programming Paradigms)** course at **Télécom Paris**.
 
 ---
 
-## Sommaire
+## Table of Contents
 
-- [Description & Fonctionnalités](#description--fonctionnalités)
-- [Architecture Système](#architecture-système)
-- [Concepts POO & Design Patterns](#concepts-poo--design-patterns)
-- [Structure du Projet](#structure-du-projet)
-- [Compilation et Exécution](#compilation-et-exécution)
-- [Protocole de Communication](#protocole-de-communication)
-- [Auteur](#auteur)
-
----
-
-## Description & Fonctionnalités
-
-Ce projet est un système distribué composé d'un moteur de gestion multimédia en **C++** et d'une application cliente graphique en **Java Swing**. Les deux parties communiquent à travers un protocole réseau sur Sockets TCP.
-
-### Backend C++
-- **Hiérarchie multimédia** : Modélisation des objets `Photo` (avec coordonnées GPS), `Video` (avec durée) et `Film` (avec tableau de chapitres).
-- **Gestion de collections** : Regroupement de médias dans la classe `Groupe` sous forme de listes de pointeurs partagés (`std::shared_ptr`), évitant toute duplication de données en mémoire.
-- **Gestion mémoire sûre** : Utilisation des pointeurs intelligents pour prévenir les fuites de mémoire.
-- **Serveur TCP multithread** : Traitement des commandes à distance (`show`, `play`).
-- **Persistance** : Sérialisation et désérialisation du catalogue sur disque avec instanciation dynamique des classes.
-
-### Client Java Swing
-- **Interface graphique** : Fenêtre principale avec console d'affichage, zone de saisie, barre d'outils et menus.
-- **Télécommande TCP** : Envoi synchrone de requêtes au serveur C++ et affichage des réponses en temps réel.
+- [Description & Features](#description--features)
+- [System Architecture](#system-architecture)
+- [OOP Concepts & Design Patterns](#oop-concepts--design-patterns)
+- [Project Structure](#project-structure)
+- [Build and Execution](#build-and-execution)
+- [Communication Protocol](#communication-protocol)
+- [Author](#author)
 
 ---
 
-## Architecture Système
+## Description & Features
+
+This project is a distributed system consisting of a **C++** multimedia management engine and a **Java Swing** graphical client application. Both components communicate over a custom network protocol using TCP Sockets.
+
+### C++ Backend Engine
+- **Multimedia Hierarchy**: Object modeling for `Photo` (with GPS coordinates), `Video` (with duration), and `Film` (with chapter duration array).
+- **Collection Management**: Grouping media in the `Groupe` class as lists of shared pointers (`std::shared_ptr`), avoiding data duplication in memory.
+- **Safe Memory Management**: System-wide use of smart pointers to prevent memory leaks.
+- **Multithreaded TCP Server**: Remote request processing (`show`, `play`).
+- **Data Persistence**: Catalog serialization and deserialization to disk with dynamic object instantiation (Factory pattern).
+
+### Java Swing Client
+- **Graphical User Interface**: Main window featuring a log console, command input field, toolbar, and menu bar.
+- **TCP Remote Controller**: Synchronous request delivery to the C++ server and real-time response rendering.
+
+---
+
+## System Architecture
 
 ```mermaid
 graph TD
     subgraph Client ["Client GUI (Java Swing)"]
         UI[MainFrame / Swing UI]
-        NetClient[Client Socket TCP]
-        UI -->|Commandes| NetClient
+        NetClient[TCP Socket Client]
+        UI -->|User Commands| NetClient
     end
 
-    subgraph Network ["Réseau Local"]
-        Socket[Socket TCP / Port 3331]
-        NetClient <-->|Requêtes / Réponses| Socket
+    subgraph Network ["Local Network"]
+        Socket[TCP Socket / Port 3331]
+        NetClient <-->|Requests / Responses| Socket
     end
 
-    subgraph Server ["Serveur Backend (C++)"]
-        TCPServer[TCPServer / Socket POSIX]
+    subgraph Server ["Backend Server (C++)"]
+        TCPServer[TCPServer / POSIX Socket]
         Manager[MultimediaManager]
         Factory[Factory & Serializer]
         
         Socket <--> TCPServer
-        TCPServer -->|Parsing| Manager
+        TCPServer -->|Command Parsing| Manager
         Manager --> Factory
         
-        subgraph MediaCore ["Hiérarchie Multimédia"]
+        subgraph MediaCore ["Multimedia Hierarchy"]
             Base[MultimediaObject]
             Photo[Photo]
             Video[Video]
@@ -82,48 +82,48 @@ graph TD
 
 ---
 
-## Concepts POO & Design Patterns
+## OOP Concepts & Design Patterns
 
-| Concept | Application dans le projet |
+| Concept | Application in Project |
 | :--- | :--- |
-| **Encapsulation & Abstraction** | Classe de base abstraite `MultimediaObject` imposant l'interface (`play()`, `className()`). |
-| **Pointeurs intelligents** | `std::shared_ptr` pour le partage d'objets entre plusieurs groupes sans duplication. |
-| **Pattern Factory** | Instanciation dynamique d'objets à partir du nom de leur classe lors du chargement des fichiers. |
-| **Sérialisation polymorphe** | Utilisation de méthodes virtuelles `writeData()` / `readData()` pour la persistance. |
-| **Sockets & Client-Serveur** | Découplage complet entre l'IHM et la logique métier backend via Sockets TCP POSIX. |
+| **Encapsulation & Abstraction** | Abstract base class `MultimediaObject` enforcing contract methods (`play()`, `className()`). |
+| **Smart Pointers** | `std::shared_ptr` to share media objects across multiple groups without duplication. |
+| **Factory Pattern** | Dynamic object instantiation from class names during file loading. |
+| **Polymorphic Serialization** | Virtual methods `writeData()` / `readData()` for stream persistence. |
+| **Sockets & Client-Server** | Clean separation of concerns between GUI and backend business logic via POSIX TCP Sockets. |
 
 ---
 
-## Structure du Projet
+## Project Structure
 
 ```text
 Projet-C-Java-Swing/
-├── C++/                          # Moteur multimédia C++
-│   ├── main.cpp                  # Scénario de test local
-│   ├── server.cpp                # Serveur TCP
-│   ├── tcpserver.cpp / .h        # Wrapper de socket serveur TCP multithread
-│   ├── ccsocket.cpp / .h         # Wrapper des sockets POSIX/BSD
-│   ├── multimediamanager.cpp /.h # Gestionnaire du catalogue et des groupes
-│   ├── multimediaobject.cpp /.h  # Classe abstraite de base
-│   ├── photo.cpp / .h            # Gestion des photos
-│   ├── video.cpp / .h            # Gestion des vidéos
-│   ├── film.cpp / .h             # Gestion des films et chapitres
-│   ├── groupe.h                  # Classe de regroupement de médias
-│   └── Makefile                  # Script de compilation C++
+├── C++/                          # C++ Multimedia Engine
+│   ├── main.cpp                  # Local test scenario
+│   ├── server.cpp                # TCP Server entry point
+│   ├── tcpserver.cpp / .h        # Multithreaded TCP server socket wrapper
+│   ├── ccsocket.cpp / .h         # POSIX/BSD socket encapsulation
+│   ├── multimediamanager.cpp /.h # Catalog and group manager
+│   ├── multimediaobject.cpp /.h  # Abstract base class
+│   ├── photo.cpp / .h            # Photo management (lat, long)
+│   ├── video.cpp / .h            # Video management (length)
+│   ├── film.cpp / .h             # Film management (chapters)
+│   ├── groupe.h                  # Media grouping collection
+│   └── Makefile                  # C++ build script
 │
-└── Java-Swing/                   # Client Télécommande Java
+└── Java-Swing/                   # Java Remote Controller Client
     └── src/
-        ├── Main.java             # Point d'entrée de l'application
-        ├── MainFrame.java        # Fenêtre principale et interface Swing
-        ├── Client.java           # Client Socket TCP Java
-        └── Makefile              # Script de compilation et d'exécution
+        ├── Main.java             # Client application entry point
+        ├── MainFrame.java        # Main window and Swing UI
+        ├── Client.java           # Java TCP Socket client
+        └── Makefile              # Java build and run script
 ```
 
 ---
 
-## Compilation et Exécution
+## Build and Execution
 
-### 1. Démarrer le serveur C++
+### 1. Start the C++ Server
 
 ```bash
 cd C++
@@ -131,11 +131,11 @@ make clean && make
 ./server
 ```
 
-> Le serveur écoute par défaut sur le port **3331**.
+> By default, the server listens on port **3331**.
 
 ---
 
-### 2. Lancer la télécommande Java Swing
+### 2. Launch the Java Swing Remote Controller
 
 ```bash
 cd Java-Swing/src
@@ -145,25 +145,25 @@ make run
 
 ---
 
-## Protocole de Communication
+## Communication Protocol
 
-Format des échanges textuels sur la socket TCP (port 3331) :
+Format of text messages exchanged over the TCP socket (port 3331):
 
 ```text
-Client  --->  "show media franck"   --->  Serveur
-Client  <---  "Photo: franck ..."   <---  Serveur
+Client  --->  "show media franck"   --->  Server
+Client  <---  "Photo: franck ..."   <---  Server
 
-Client  --->  "show groupe Contenu" --->  Serveur
-Client  <---  "Groupe: Contenu ..." <---  Serveur
+Client  --->  "show groupe Contenu" --->  Server
+Client  <---  "Groupe: Contenu ..." <---  Server
 
-Client  --->  "play video1"          --->  Serveur
-Client  <---  "Playing video1"       <---  Serveur
+Client  --->  "play video1"          --->  Server
+Client  <---  "Playing video1"       <---  Server
 ```
 
 ---
 
-## Auteur
+## Author
 
 **Wassim Smati** — [GitHub](https://github.com/Wassim-Smati)  
-Élève-Ingénieur à **Télécom Paris**  
-Projet réalisé dans le cadre de l'UE INF224.
+Engineering Student at **Télécom Paris**  
+Course Project for INF224 (Programming Paradigms).
