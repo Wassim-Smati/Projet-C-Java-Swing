@@ -70,9 +70,9 @@ graph TD
             Film[Film]
             Groupe[Groupe]
             
-            Base <|-- Photo
-            Base <|-- Video
-            Video <|-- Film
+            Base -->|inherits| Photo
+            Base -->|inherits| Video
+            Video -->|inherits| Film
             Groupe -->|shared_ptr| Base
         end
         
